@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="studio.css">
 </head>
 <body>
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
@@ -116,6 +117,77 @@
     </section>
   </div>
 
+
+  <!-- STUDIO -->
+  <section class="card tilt lilac studio" id="studio">
+    <h2>🎬 AI Studio <span class="spark">✨</span></h2>
+    <p class="muted">Channel category ki saripoye video generate chesi YouTube ki upload chestundi.</p>
+
+    <details open class="guide"><summary>📖 Process: edi enduku, ekkada nundi?</summary><ol>
+      <li><b>YouTube API key + Channel link</b> (paina Setup lo): mee channel niche/category telusukovadaniki.</li>
+      <li><b>OAuth Client ID</b> (console.cloud.google.com → Credentials → OAuth client → Web). Authorized origin lo mee site URL pettali. <i>Upload permission</i> kosam, YouTube Data API v3 enable cheyyali.</li>
+      <li><b>Video AI API key</b> (aistudio.google.com/apikey). Video generate cheyyadaniki. Model name field lo mee model (Veo / Omni) ID pettandi.</li>
+      <li><b>Daily credits</b>: mee plan limit enter cheyyandi (e.g. 50). Reset time ayyaka Auto mode malli start avthundi.</li>
+      <li><b>Manual</b> = nuvvu prompt isthav, preview chusi upload. <b>Auto</b> = category batti idea → generate → upload, daily budget varaku.</li>
+    </ol>
+    <p class="muted">⚠️ Auto mode browser tab open lo unnappude run avthundi (server ledu). Unverified API projects lo uploads <b>Private</b> ga veltayi.</p></details>
+
+    <div class="grid2">
+      <div>
+        <label>Video AI API key<input id="genKey" type="password" placeholder="AIza… (browser lo ne untundi)"></label>
+        <label>Video model ID<input id="genModel" type="text" placeholder="veo-3.1-fast-generate-preview"></label>
+      </div>
+      <div>
+        <label>Daily credits<input id="credTotal" type="number" min="1" value="50"></label>
+        <label>Credits per video<input id="credCost" type="number" min="1" value="10"></label>
+      </div>
+    </div>
+    <div class="bar"><div class="fill coralf" id="credBar"></div><span class="pct" id="credTxt">0 / 50</span></div>
+    <p class="muted" id="credReset"></p>
+
+    <div class="row seg">
+      <button class="puffy sky small on" data-mode="manual">✋ Manual</button>
+      <button class="puffy mint small" data-mode="auto">🤖 Automatic</button>
+      <span class="gap"></span>
+      <button class="puffy coral small on" data-fmt="short">📱 Shorts</button>
+      <button class="puffy butter small" data-fmt="long">🖥️ Long</button>
+    </div>
+    <label>Prompt / Topic <small>(chinna ledha pedda prompt, rendu ok. Khali vadilite AI channel chusi topic pick chestundi)</small>
+      <textarea id="topic" rows="2" placeholder="Short: cute crochet bunny&#10;Leda pedda detailed prompt ikkada paste cheyyi…"></textarea>
+      <small class="muted" id="topicCount">0 chars · Short prompt</small></label>
+    <div class="row"><button class="puffy butter small" id="anaBtn">🧠 Analyze channel &amp; suggest topics</button></div>
+    <div id="insight" class="insight" hidden></div>
+    <div id="topics" class="topics"></div>
+    <label id="autoRow" hidden>Videos per day<input id="perDay" type="number" min="1" value="3"></label>
+    <label>Category <input id="cat" type="text" placeholder="Auto-detect from channel" readonly></label>
+
+    <div class="grid2">
+      <label class="chk"><input type="checkbox" id="thumbOn" checked> 🖼️ Thumbnail kuda generate chey</label>
+      <label>Image model ID<input id="imgModel" type="text" placeholder="gemini-2.5-flash-image"></label>
+    </div>
+    <div class="row">
+      <button class="puffy coral" id="genBtn">✨ Generate</button>
+      <button class="puffy mint" id="upBtn" disabled>🚀 Upload to YouTube</button>
+      <button class="puffy sky" id="autoBtn" hidden>▶ Start Auto</button>
+    </div>
+    <div id="thumbBox" hidden>
+      <h3>🖼️ Thumbnail (1280×720)</h3>
+      <canvas id="thumbCv" width="1280" height="720"></canvas>
+      <label>Thumbnail text <small>(3-4 words, marchi Re-render nokku)</small><input id="thumbText" type="text" maxlength="30"></label>
+      <div class="row"><button class="puffy butter small" id="thumbRe">🔄 Re-render</button>
+        <button class="puffy sky small" id="thumbNew">🎨 New image</button>
+        <button class="puffy mint small" id="thumbDl">⬇ Download</button></div>
+    </div>
+    <video id="preview" controls hidden></video>
+    <div id="metaBox" hidden>
+      <h3>📝 Auto-generated post (edit cheyochu)</h3>
+      <label>Title<input id="mTitle" type="text" maxlength="100"></label>
+      <label>Description<textarea id="mDesc" rows="9"></textarea></label>
+      <label>Tags <small>(comma tho)</small><input id="mTags" type="text"></label>
+    </div>
+    <div class="logbox" id="log"></div>
+  </section>
+
   <footer>
     Built with HTML · CSS · JS &nbsp;|&nbsp; Numbers come straight from the official YouTube Data API.<br>
     Likes are summed from the channel's latest 50 videos (YouTube doesn't expose a channel-wide likes total).
@@ -123,6 +195,8 @@
   </footer>
 </main>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<canvas id="fx"></canvas>
 <script src="script.js"></script>
+<script src="studio.js"></script>
 </body>
 </html>
